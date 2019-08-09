@@ -1,5 +1,7 @@
 import torch
 import torch.utils.data as data
+import torch.nn.functional as F
+import torch.nn as nn
 import numpy as np 
 import pandas as pd 
 import argparse
@@ -70,18 +72,17 @@ class hot_dog_data(data.Dataset):
             self.temp.append(row[10])
 
         self.ids = torch.tensor(self.ids)
-        self.mass = torch.tensor(self.mass)
-        self.calories = torch.tensor(self.calories)
-        self.fat = torch.tensor(self.fat)
-        self.cholestrol = torch.tensor(self.cholestrol)
-        self.sodium = torch.tensor(self.sodium)
-        self.potassium = torch.tensor(self.potassium)
-        self.carbohydrates = torch.tensor(self.carbohydrates)
-        self.protein = torch.tensor(self.protein)
-        self.time = torch.tensor(self.time)
-        self.temp = torch.tensor(self.temp)
+        self.mass = F.normalize(torch.tensor(self.mass), dim=0)
+        self.calories = F.normalize(torch.tensor(self.calories), dim=0)
+        self.fat = F.normalize(torch.tensor(self.fat), dim=0)
+        self.cholestrol = F.normalize(torch.tensor(self.cholestrol), dim=0)
+        self.sodium = F.normalize(torch.tensor(self.sodium), dim=0)
+        self.potassium = F.normalize(torch.tensor(self.potassium), dim=0)
+        self.carbohydrates = F.normalize(torch.tensor(self.carbohydrates), dim=0)
+        self.protein = F.normalize(torch.tensor(self.protein), dim=0)
+        self.time = F.normalize(torch.tensor(self.time), dim=0)
+        self.temp = F.normalize(torch.tensor(self.temp), dim=0)
 
-        # features
 
     def __getitem__(self, idx):
         # idx = self.ids[idx]
