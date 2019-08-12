@@ -124,6 +124,6 @@ def collate_fn(examples):
     carbohydrates = merge_0d(carbohydrates)
     protein = merge_0d(protein)
     time = merge_0d(time)
-    temp = merge_0d(temp)
+    temp = torch.squeeze(merge_0d(temp))
 
     return (mass, calories, fat, cholestrol, sodium, potassium, carbohydrates, protein, time, temp)

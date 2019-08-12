@@ -14,7 +14,7 @@ def main(args):
     best_hs = 0
     best_e = 0
     best_batch_size = 0
-    for hs in range(2,100):
+    for hs in tqdm(range(2,100)):
         args.hidden_size = hs
         for bs in range(2,10):
             args.batch_size = bs
@@ -31,10 +31,10 @@ def main(args):
                 model.train()
                 optimizer = optim.Adam(params=model.parameters(), lr=args.learning_rate)
                 loss = nn.MSELoss()
-                for _ in tqdm(range(args.num_epochs)):
+                for _ in (range(args.num_epochs)):
                     for i1, i2, i3, i4, i5, i6, i7, i8, i9, i10 in train_loader:
                         res = model.forward(i1, i2, i3, i4, i5, i6, i7, i8, i9)
-                        loss_val = loss(res, i10)
+                        loss_val = loss(res, torch.squeeze(i10))
                         loss_val.backward()
                         optimizer.step()
 
@@ -43,8 +43,9 @@ def main(args):
                 for i1, i2, i3, i4, i5, i6, i7, i8, i9, i10 in train_loader:
                     res = model.forward(i1, i2, i3, i4, i5, i6, i7, i8, i9)
                     loss_val = loss(res, i10)
-                    if abs(res - i10) < .001:
-                        correct += 1
+                    for i, j in zip(res, i10):
+                        if (i.item() - j.item()) < .001:
+                            correct += 1
 
                 if correct > best_loss:
                     best_loss = correct
